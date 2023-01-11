@@ -38,6 +38,9 @@ class ModuleStepper {
     
     // Проверяем, в какую сторону вращать модуль;
     void setDirection(uint8_t _state);
+
+    // Плавное торможение модуля при отпускании клавиши;
+    void setSlowDown();
     
     // Осуществляем вращение модуля;
     void stepRun(uint8_t _state);
@@ -51,20 +54,17 @@ class ModuleStepper {
     // Половина шага (задействуется половина обмоток шагового мотора);
     void halfStep(uint16_t _pause);
     
-    // Останавливаем вращение модуля;
-    void stepStop();
-    
-    // Программный таймер;
-    void mainTimer(uint16_t _delay);
-    
     // Устанавливаем скорость от 100 200 300 (при лимите равном 100);
     void setMaxOfSpeed(uint16_t _speed);
     
     // Устанавливаем количество вращений в секунду;
     void setCountRotate(uint8_t _count);
 
-    // Устанавливаем угол вращения;
-    void setDegreeRotate(uint16_t _degreeRotate);
+    // Программный таймер;
+    void mainTimer(uint16_t _delay);
+
+    // Останавливаем вращение модуля;
+    void stepStop();
   
   private: // приватные (частные) переменные, функции;
   
@@ -78,20 +78,20 @@ class ModuleStepper {
     
     uint8_t _countRotate = 1; // Количество вращений в секунду;
     
-    uint8_t _stepSize = 10; // Размер шага для ускорения;
-
-    uint8_t _limitForBoost = 100; // Предел ускорения;
-
-    uint16_t _minOfSpeed = 0; // Минимальная скорость;
-
-    uint16_t _maxOfSpeed = 100; // Максимальная скорость [100, 200, 300];
-
-    uint16_t _boostOfSpeed = _minOfSpeed; // Увеличение скорости (ускорение);
-
-    uint16_t _delayAdjustment = 2000; // Корректировка задержки [1миллисек];
+    uint8_t _slowdown = 0; // Плавное торможение модуля [ВЫКЛ];
     
-    int16_t _degree = 45; // Заданный угол поворота (2000 = 360 градусов);
-
+    uint8_t _stepSize = 10; // Размер шага для ускорения;
+	
+    uint8_t _limitForBoost = 100; // Предел ускорения;
+	
+    uint16_t _minOfSpeed = 0; // Минимальная скорость;
+	
+    uint16_t _maxOfSpeed = 100; // Максимальwная скорость [100, 200, 300];
+	
+    uint16_t _boostOfSpeed = _minOfSpeed; // Увеличение скорости (ускорение);
+    
+    int16_t _degree = 1; // Заданный угол поворота (360 градусов = 2000 шагов);
+	
     uint32_t _stepCount = 2000; // Общее кол-во шагов за оборот;
 
     Timer timer0; // Создаём таймер 0;
