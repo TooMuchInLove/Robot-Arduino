@@ -31,117 +31,19 @@ void ModuleStepper::stepRun(uint8_t _state) {
   
   setDirection(_state); // Направление вращения модуль ВПЕРЁД/НАЗАД;
 
-  /*
-  uint16_t limit = floor(_limitForBoost / _stepSize) * _stepSize; // Предел для ускорения;
-  if (limit < _limitForBoost) // Если(пока) фактический предел меньше заданного;
-    limit += _stepSize; // Прибавляем к нему размер заданного шага;
-  _boostOfSpeed += _sizeStep; // Увеличение скорости (ускорение);
-  if (_boostOfSpeed >= limit) // Определяем предел ускорения;
-    _boostOfSpeed = limit; // Ускорение всегда от 0 до limit + step;  
-  //Serial.print("[boost:"+String(_boostOfSpeed)+"]");
-  */
-
-  /*
-  _boostOfSpeed += _stepSize; // Увеличение скорости (ускорение);
-  if (_boostOfSpeed >= _limitForBoost) // Определяем предел ускорения;
-    _boostOfSpeed = _limitForBoost; // Ускорение всегда от 0 до limit + step;
-  */
-
   _boostOfSpeed += _stepSize; // Увеличение скорости (ускорение);
   if (_maxOfSpeed-(_minOfSpeed+_boostOfSpeed) >= _limitForBoost) // Определяем предел ускорения;
     _boostOfSpeed = _maxOfSpeed; // Ускорение всегда от 0 до limit + step;
-  
-  /*
-  uint8_t state = 0; // Состояние обмоток;
-  //uint16_t degree = 100; // Угол поворота модуля (2000 = 360 градусов);
-  uint16_t pause = _delayAdjustment - (_maxOfSpeed + _boostOfSpeed); // Задержка;
 
-  timer1.Set(pause);
-  if (timer1.Now()) {
-    for (uint16_t turn=0; turn<=_boostOfSpeed/2; turn++) {
-      timer2.Set(pause);
-      if (timer2.Now()) {
-        for (uint8_t count=1; count<=_countRotate; count++) {
-          timer3.Set(10);
-          if (timer3.Now()) {
-            //state = !state; digitalWrite(_pinPul, state);
-            digitalWrite(_pinPul, HIGH); digitalWrite(_pinPul, LOW);
-          }
-        }
-      }
-    }
-  }
-  */
-
-  /*
-  uint32_t pause = _delayAdjustment - (_maxOfSpeed + _boostOfSpeed); // Задержка;
-  uint8_t state = 0;
-  for (uint16_t turn=0; turn<=_boostOfSpeed/2; turn++) {
-    for (uint8_t count=1; count<=_countRotate; count++) {
-      Timer timer(pause);
-      if (timer.Now()) {
-        state = !state; digitalWrite(_pinPul, state);
-        //digitalWrite(_pinPul, HIGH); digitalWrite(_pinPul, LOW);
-      }
-    }
-  }
-  */
-
-  /*
-  //uint8_t state = 0; // Состояние обмоток;
-  //uint16_t degree = 100; // Угол поворота модуля (2000 = 360 градусов);
-  uint16_t pause = _delayAdjustment - (_maxOfSpeed + _boostOfSpeed); // Задержка;
-  //pause = 100;
-  timer2.Set(pause);
-  timer3.Set(100);
-  
-  //_boostOfSpeed = 200;
-  //_countRotate = 200;
-
-  if (timer2.Now()) {
-    for (uint16_t turn=0; turn<=_boostOfSpeed/2; turn++) {
-      for (uint8_t count=1; count<=_countRotate; count++) {
-        if (timer3.Now()) {
-          fullStep(100); // Полный шаг;
-          //digitalWrite(_pinPul, HIGH);
-          //mainTimer(50);
-          //digitalWrite(_pinPul, LOW);
-        }
-      }
-    }
-  }
-  */
-
-  //*
   uint8_t state = 0;
   uint32_t pause = _delayAdjustment - (_maxOfSpeed + _boostOfSpeed); // Задержка;
   for (uint16_t turn=0; turn<=_boostOfSpeed/2; turn++) {
     for (uint8_t count=1; count<=_countRotate; count++) {
-      //state = !state;
-      //digitalWrite(_pinPul, state);
       digitalWrite(_pinPul, HIGH);
       if (count == _countRotate) mainTimer(pause);
       digitalWrite(_pinPul, LOW);
     }
   }
-  //*/
-
-  /*
-  uint32_t microPause = _delayAdjustment - (_maxOfSpeed + _boostOfSpeed); // Задержка;
-  uint8_t state = 0;
-  for (uint16_t turn=0; turn<=_boostOfSpeed/2; turn++) {
-    for (uint8_t count=1; count<=_countRotate; count++) {
-      if (_timeBegin - _timeEndM1H >= microPause) {
-        _timeEndM1H = _timeBegin;
-        digitalWrite(_pinPul, HIGH);
-        if (_timeBegin - _timeEndM1L >= microPause) {
-          _timeEndM1L = _timeBegin;
-          digitalWrite(_pinPul, LOW);
-        }
-      }
-    }
-  }
-  */
 
 }
 
@@ -149,12 +51,6 @@ void ModuleStepper::stepRun(uint8_t _state) {
 void ModuleStepper::stepRunPlus(uint8_t _state) {
 
   setDirection(_state); // Направление вращения модуль ВПЕРЁД/НАЗАД;
-  
-  //if (!_state) // Если модуль вращается ВПЕРЁД;
-  //  _degreeMain += _degree;
-  //if (_state) // Если модуль вращается НАЗАД;
-  //  _degreeMain -= _degree;
-  //Serial.println(String(_state)+":"+String(_degreeMain));
   
   uint32_t steps = (_stepCount * _degree) / 360; // Кол-во шагов на заданный градус;
   uint16_t pause = 5000; // Задержка между прокруткой;
