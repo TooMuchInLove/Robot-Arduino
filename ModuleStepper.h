@@ -89,8 +89,6 @@ class ModuleStepper {
     uint16_t _boostOfSpeed = _minOfSpeed; // Увеличение скорости (ускорение);
 
     uint16_t _delayAdjustment = 2000; // Корректировка задержки [1миллисек];
-
-    int16_t _degreeMain = 0; // Начальное положение модуля;
     
     int16_t _degree = 45; // Заданный угол поворота (2000 = 360 градусов);
 
